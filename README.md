@@ -1,0 +1,2 @@
+# xingking
+just another repository
