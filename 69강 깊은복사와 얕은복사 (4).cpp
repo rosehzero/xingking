@@ -6,25 +6,39 @@ class String {
 public:
 	String() {
 		cout << "String() : " << this << endl;
-		// 구현
+		strData = NULL;
+		len = 0;
 	}
 	String(const char* str) {
 		cout << "String(const char*) : " << this << endl;
-		// 구현
+		len = strlen(str);
+		alloc(len);
+		strcpy(strData, str);
 	}
+
+	//복사 생성자
 	String(const String& rhs) {
 		cout << "String(const String&) : " << this << endl;
-		// 구현
+		len = rhs.len;
+		alloc(len);
+		strcpy(strData, rhs.strData);
 	}
 
 	~String() {
 		cout << "~String() : " << this << endl;
-		// 구현
+		release();
+		strData = NULL;
 	}
 
+	// 복사 대입 연산자
 	String& operator=(const String& rhs) {
 		cout << "String &operator=(const String&) : " << this << endl;
-		// 구현
+		if (this != &rhs) {
+			release();
+			len = rhs.len;
+			alloc(len);
+			strcpy(strData, rhs.strData);
+		}
 		return *this;
 	}
 
@@ -35,7 +49,10 @@ public:
 		return len;
 	}
 	void SetStrData(const char* str) {
-		// 구현
+		cout << "void SetStrData(const char*) : " << this << ", " << str << endl;
+		len = strlen(str);
+		alloc(len);
+		strcpy(strData, str);
 	}
 
 private:
@@ -59,9 +76,17 @@ String getName() {
 	return res;
 }
 
+int f() { return 5; }
+
+
 int main() {
 	String a;
 	cout << "===== 1 =====" << endl;
 	a = getName();
 	cout << "===== 4 =====" << endl;
+
+
+	String&& r = getName();
+
+	// 임시객체는 r - value !! 
 }
