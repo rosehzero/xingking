@@ -2,13 +2,37 @@
 
 using namespace std;
 
-// 0. 다음 프로그램의 실행 결과는?
+// 1. □ 부분에 알맞은 기호를 넣고, 출력 결과를 예측해보세요.
 
 int main() {
-	char str[] = "Hello, World!";
-	char* p_str = str;
+	int a = 10, b = 20, c = 30;
+
+	int* p = &a;
+
+	int& r = b;
+
+	int** pp = &p; // p라는 포인터를 가리키는 더블 포인터 pp (24강)
+
+	int* (&rp) = p; // p라는 포인터를 가리키는 레퍼런스 변수 rp (51강)
 
 
-	cout << p_str << endl;
-	cout << *p_str << endl;
+	r = c / *p;
+
+	rp = &c;
+
+	**pp = 40;
+
+	*p = 50;
+
+	*pp = &a;
+
+	*rp = 60;
+
+	cout << a << endl;
+	cout << b << endl;
+	cout << c << endl;
+	cout << *p << endl;
+	cout << r << endl;
+	cout << **pp << endl;
+	cout << *rp << endl;
 }
