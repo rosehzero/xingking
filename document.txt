@@ -1,14 +1,11 @@
-// override : 우선하다
-// overwrite : 덮어쓰다 
-
 #include <iostream>
 
 using namespace std;
 
 class Base {
 public:
+
 	
-	int a = 10;
 	void Print() {
 		cout << "From Base!!!" << endl;
 	}
@@ -16,18 +13,20 @@ public:
 
 class Derived : public Base {
 public:
-	int a = 20;
+	
 	void Print() {
 		cout << "From Derived!!!" << endl;
 	}
 };
 
-int main() {
-	
-	Derived d;
-
-	d.Print();
-	d.Base::Print();
-	d.Derived::Print();
+class Derived2 : public Base {
 
 };
+
+int main() {
+	Base* b = new Derived();
+	b->Print();
+	b = new Derived2();
+	b->Print();
+
+}
