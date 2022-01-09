@@ -1,76 +1,92 @@
+
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-class Weapon {
-public :
-	Weapon(int power) : power(power) {
-		cout << "Weapon(int)" << endl;
+class Image {
+public:
+	operator string() {
+		return "사진";
 	}
-
-
-	virtual void Use() {  //가상 함수
-		cout << "Weapon::Use()" << endl;
-	}
-
-
-protected:
-	int power;
 
 };
 
-class Sword : public Weapon {
-public:
-	Sword(int power) : Weapon(power) {
-		cout << "Sword(int)" << endl;
-	}
+class Message {
+public: 	
+	Message(int sendTime, string sendName) {
+		this->sendTime = sendTime;
+		this->sendName = sendName;
 
-	void Use() {
-		cout << "Sword::Use()" << endl;
-		Swing();
 	}
+	int GetSendTime() const { return sendTime; }
+	string GetSendName() const { return sendName; }
+
+	virtual string GetContent() const { return ""; }
 
 private:
-	void Swing() {
-		cout << "Swing sword." << endl;
-	}
+	int sendTime;
+	string sendName;
+
 };
 
-class Magic : public Weapon {
+
+class TextMessage : public Message {
 public:
-	Magic(int power, int manaCost) : Weapon(power), manaCost(manaCost) {
-		cout << "Magic(int, int)" << endl;
-
+	TextMessage(int sendTime, string sendName, string text) 
+	: Message(sendTime, sendName) {
+		this->text = text;
 	}
+	string GetText() const { return text;  }
+	string GetContent() const { return text; }
+	
+private:
+	string text;
+};
 
-	void Use() {
-		cout << "Magic::Use()" << endl;
-		Cast();
-	}
+class ImageMessage : public Message {
+
+public:
+	ImageMessage(int sendTime, string sendName, Image* image)
+		: Message(sendTime, sendName), p_image(image) {}
+		
+		
+	
+	Image *GetImage() const { return p_image; }
+	string GetContent() const { return (string)*p_image; }
 
 private:
-	void Cast() {
-		cout << "Cast Magic." << endl;
-	}
-
-	int manaCost;
+	Image *p_image;
 };
+
+
+void printMessage(const Message &m) {
+	cout << "보낸 시간 : " << m.GetSendTime() << endl;
+	cout << "보낸 사람 : " << m.GetSendName() << endl;
+	cout << " 내 용    : " << m.GetContent() << endl;
+	cout << endl;
+
+}
 
 
 int main() {
+	Image* p_dogImage = new Image();
 
-	Sword mySword(10);
-	Magic myMagic(15, 7);
+	Message* messages[] = {
+		new TextMessage(10, "사용자", "안녕"),
+		new TextMessage(11, "사용자", "안녕"),
+		new TextMessage(12, "사용자", "안녕"),
+		new ImageMessage(20, "사용자", p_dogImage)
 
-	mySword.Use();
-	myMagic.Use();
+	};
 
-	Weapon* currentWeapon;
+	for (Message* m : messages) {
+		printMessage(*m);
+	}
 
-	currentWeapon = &mySword;
-
-	currentWeapon->Use();
+	/* for (int i = 0; i < 4; i++) {
+		printMessage(*messages[i]);
+	}*/
 	
-	currentWeapon = &myMagic;
-	currentWeapon->Use();
+	delete p_dogImage;
 }
