@@ -1,113 +1,32 @@
 #include <iostream>
 
-​
-
-​
-
 using namespace std;
 
-​
-
-class Ice {
-
+class Animal {
 public:
-
-Ice() { cout << "Ice()" << endl; }
-
-~Ice() { cout << "~Ice()" << endl; }
-
-​
-
+	float xpos = 1;
+	float ypos = 2;
 };
 
-​
-
-class Pat {
-
+class FlyingAnimal : public Animal {
 public:
-
-Pat() { cout << "Pat()" << endl; }
-
-~Pat() { cout << "~Pat()" << endl; }
-
+	float zpos = 3;
 };
 
-​
-
-class Bingsoo {
-
-public:
-
-Bingsoo() { 
-
-cout << "Bingsoo()" << endl; 
-
-ice = new Ice;
-
+void printAnimals(Animal **a, int n) {
+	for (int i = 0; i < n; i++) {
+		cout << "(" << a[i]->xpos << "," << a[i]->ypos << ")" << endl;
+	}
 }
-
-​
-
-virtual ~Bingsoo() { 
-
-cout << "~Bingsoo()" << endl;
-
-delete ice;
-
-}
-
-​
-
-private:
-
-Ice *ice;
-
-};
-
-​
-
-class PatBingsoo : public Bingsoo {
-
-public:
-
-PatBingsoo() {
-
-cout << "PatBingsoo()" << endl;
-
-pat = new Pat;
-
-}
-
-~PatBingsoo() {
-
-cout << "~PatBingsoo()" << endl;
-
-delete pat;
-
-}
-
-​
-
-​
-
-private:
-
-Pat *pat;
-
-};
-
-​
 
 int main() {
-
-Bingsoo* p = new PatBingsoo;
-
-​
-
-​
-
-​
-
-delete p;
-
+	Animal** a = new Animal*[10];
+	for (int i = 0; i < 10; i++) {
+		a[i] = new FlyingAnimal;
+	}
+	printAnimals(a, 10);
+	for (int i = 0; i < 10; i++) {
+		delete a[i];
+	}
+	delete[] a;
 }
