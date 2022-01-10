@@ -1,72 +1,93 @@
+​
+
 #include <iostream>
+
+​
+
+​
 
 using namespace std;
 
+​
 
+class Ice {
 
-const double PI = 3.141592653589793;
-
-
-class Shape {
 public:
-	virtual double GetArea() = 0;
-	
-	virtual void Resize(double f) = 0;
-	
+
+Ice() { cout << "Ice()" << endl; }
+
+~Ice() { cout << "~Ice()" << endl; }
+
+​
+
 };
 
-class Circle : public Shape {
+​
+
+class Pat {
+
 public:
-	Circle(double r) : r(r) {}
 
-	double GetArea() {
-		return PI * r * r;
-	}
+Pat() { cout << "Pat()" << endl; }
 
-	void Resize(double f) {
-		r *= f;
-	}
+~Pat() { cout << "~Pat()" << endl; }
+
+};
+
+​
+
+class Bingsoo {
+
+public:
+
+Bingsoo() { cout << "Bingsoo()" << endl; 
+
+ice = new Ice;
+
+}
+
+​
+
+~Bingsoo() { cout << "~Bingsoo()" << endl;
+
+delete ice;
+
+}
+
+​
 
 private:
-	double r;
+
+Ice *ice;
 
 };
 
-class Rectangle : public Shape{
+​
+
+class PatBingsoo : public Bingsoo {
+
 public:
-	Rectangle(double a, double b) : a(a), b(b) {}
 
-	double GetArea() {
-		return a * b;
-	}
-	
-	void Resize(double f) {
-		a *= f;
-		b *= f;
-	}
+PatBingsoo() { cout << "PatBingsoo()" << endl; }
 
+~PatBingsoo() { cout << "~PatBingsoo()" << endl; }
+
+​
+
+​
 
 private:
-	double a, b;
+
+Pat *pat;
 
 };
 
+​
 
 int main() {
-	Shape* shapes[] = {
-		new Circle(10),
-		new Rectangle(20, 30),
-		
-	};
 
-	for (Shape* s : shapes) {
-		s->Resize(2);
-    }
-	for (Shape* s : shapes) {
-		cout << s->GetArea() << endl;
-	}
+Bingsoo* p = new Bingsoo;
 
-	for (Shape* s : shapes) {
-		delete s;
-	}
+delete p;
+
 }
