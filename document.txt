@@ -1,5 +1,3 @@
-​
-
 #include <iostream>
 
 ​
@@ -40,7 +38,9 @@ class Bingsoo {
 
 public:
 
-Bingsoo() { cout << "Bingsoo()" << endl; 
+Bingsoo() { 
+
+cout << "Bingsoo()" << endl; 
 
 ice = new Ice;
 
@@ -48,7 +48,9 @@ ice = new Ice;
 
 ​
 
-~Bingsoo() { cout << "~Bingsoo()" << endl;
+virtual ~Bingsoo() { 
+
+cout << "~Bingsoo()" << endl;
 
 delete ice;
 
@@ -68,9 +70,21 @@ class PatBingsoo : public Bingsoo {
 
 public:
 
-PatBingsoo() { cout << "PatBingsoo()" << endl; }
+PatBingsoo() {
 
-~PatBingsoo() { cout << "~PatBingsoo()" << endl; }
+cout << "PatBingsoo()" << endl;
+
+pat = new Pat;
+
+}
+
+~PatBingsoo() {
+
+cout << "~PatBingsoo()" << endl;
+
+delete pat;
+
+}
 
 ​
 
@@ -86,7 +100,13 @@ Pat *pat;
 
 int main() {
 
-Bingsoo* p = new Bingsoo;
+Bingsoo* p = new PatBingsoo;
+
+​
+
+​
+
+​
 
 delete p;
 
