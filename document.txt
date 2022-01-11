@@ -1,60 +1,80 @@
 #include <iostream>
 
+#include <math.h>
+
 ​
 
 using namespace std;
 
 ​
 
-class Base {
+class Shape {
 
 public:
 
-int a = 1;
+virtual double GetArea() const = 0;
+
+virtual void Resize(double k) = 0;
 
 };
 
 ​
 
-class Drv1 : public Base {
+class Circle : public Shape {
 
 public:
 
-​
+Circle(double r) : r(r) {}
 
-void f() {
+double GetArea() const {
 
-cout << "Drv1::f()" << endl;
-
-cout << b << endl;
+return r * r * 3.14;
 
 }
 
-​
+void Resize(double k) {
 
-float b = 3.14;
+r *= k;
+
+}
+
+private:
+
+double r;
 
 };
 
 ​
 
-class Drv2 : public Base {
+class Rectangle : public Shape {
 
 public:
 
-​
+Rectangle(double a, double b) : a(a), b(b) {}
 
-void f() {
+double GetArea() const {
 
-cout << "Drv2::f()" << endl;
-
-cout << c << endl;
+return a * b;
 
 }
 
-​
+void Resize(double k) {
 
-int c = 3;
+a *= k;
+
+b *= k;
+
+}
+
+double GetDiag() const {
+
+return sqrt(a * a + b * b);
+
+}
+
+private:
+
+double a, b;
 
 };
 
@@ -62,18 +82,40 @@ int c = 3;
 
 int main() {
 
-Base* b = new Drv1;
+Shape* shapes[] = { new Circle(1), new Rectangle(1, 2) };
 
 ​
 
-Drv2* d2 = static_cast<Drv2*>(b);
+for (int i = 0; i < 2; i++) {
+
+//도형의 넓이 
+
+//만약 직사각형일 경우, 대각선의 길이 출력
+
+cout << "도형의 넓이 : " << shapes[i]->GetArea() << endl;
 
 ​
 
-d2->f();
+Rectangle* r = dynamic_cast<Rectangle*>(shapes[i]);
+
+if (r != NULL) {
+
+cout << "대각선의 길이 : " << r->GetDiag() << endl;
+
+}
+
+}
 
 ​
 
-delete b;
+for (int i = 0; i < 2; i++) {
+
+delete shapes[i];
+
+}
+
+​
+
+​
 
 }
