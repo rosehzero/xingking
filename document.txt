@@ -1,32 +1,79 @@
 #include <iostream>
 
+​
+
 using namespace std;
 
-class Animal {
+​
+
+class Base {
+
 public:
-	float xpos = 1;
-	float ypos = 2;
+
+int a = 1;
+
 };
 
-class FlyingAnimal : public Animal {
-public:
-	float zpos = 3;
-};
+​
 
-void printAnimals(Animal **a, int n) {
-	for (int i = 0; i < n; i++) {
-		cout << "(" << a[i]->xpos << "," << a[i]->ypos << ")" << endl;
-	}
+class Drv1 : public Base {
+
+public:
+
+​
+
+void f() {
+
+cout << "Drv1::f()" << endl;
+
+cout << b << endl;
+
 }
 
+​
+
+float b = 3.14;
+
+};
+
+​
+
+class Drv2 : public Base {
+
+public:
+
+​
+
+void f() {
+
+cout << "Drv2::f()" << endl;
+
+cout << c << endl;
+
+}
+
+​
+
+int c = 3;
+
+};
+
+​
+
 int main() {
-	Animal** a = new Animal*[10];
-	for (int i = 0; i < 10; i++) {
-		a[i] = new FlyingAnimal;
-	}
-	printAnimals(a, 10);
-	for (int i = 0; i < 10; i++) {
-		delete a[i];
-	}
-	delete[] a;
+
+Base* b = new Drv1;
+
+​
+
+Drv2* d2 = static_cast<Drv2*>(b);
+
+​
+
+d2->f();
+
+​
+
+delete b;
+
 }
