@@ -1,54 +1,102 @@
 #include <iostream>
 
-#include <string>
+#include <stdio.h>
 
-​
+#include <string>
 
 using namespace std;
 
 ​
 
-const double PI = 3.141592653589793;
+enum LogLevels {
 
-​
+DEBUG,
 
-class Shape {
+INFO,
 
-public:
+WARNING,
 
-virtual ~Shape() {}
+ERROR,
 
-virtual double GetArea() const = 0;
-
-virtual void Resize(double factor) = 0;
-
-virtual string GetInfo() const {
-
-return "도형의 넓이 : " + to_string(GetArea());
-
-}
+FATAL
 
 };
 
 ​
 
-class Circle : public Shape {
+const char* const LEVEL_HEADINGS[] = {
 
-public:
+"DEBUG", "INFO", "WARNING", "ERROR", "FATAL"
 
-Circle(double r) : r(r) {}
+};
 
 ​
 
-double GetArea() const {
+​
 
-return r * r * PI;
+class Logger {
+
+public:
+
+Logger(int minLevel) : minLevel(minLevel) {}
+
+virtual ~Logger() {}
+
+​
+
+void Log(const string& s, int level) {
+
+if (level >= minLevel)
+
+doLogJob(s, level);
+
+​
 
 }
 
-void Resize(double factor) {
+​
 
-r *= factor;
+int GetMinLevel() const { return minLevel; }
+
+​
+
+protected:
+
+int minLevel;
+
+virtual void doLogJob(const string& s, int level) = 0;
+
+};
+
+​
+
+​
+
+class FileLogger : public Logger {
+
+public:
+
+FileLogger(int minLevel, const string& fileName) : Logger(minLevel) {
+
+logFile = fopen(fileName.c_str(), "a");
+
+}
+
+~FileLogger() {
+
+fclose(logFile);
+
+}
+
+​
+
+​
+
+protected:
+
+virtual void doLogJob(const string& s, int level) {
+
+fprintf(logFile, "[%s] %s\n", LEVEL_HEADINGS[level], s.c_str());
 
 }
 
@@ -56,55 +104,29 @@ r *= factor;
 
 private:
 
-double r;
+FILE* logFile;
 
 };
 
 ​
 
-class Rectangle : public Shape {
+class ConsoleLogger : public Logger {
 
 public:
 
-Rectangle(double a, double b) : a(a), b(b) {}
+ConsoleLogger(int minLevel) : Logger(minLevel) {}
 
 ​
 
-double GetArea() const {
+protected:
 
-return a * b;
+virtual void doLogJob(const string& s, int level) {
 
-}
-
-void Resize(double factor) {
-
-a *= factor;
-
-b *= factor;
+printf("[%s] %s\n", LEVEL_HEADINGS[level], s.c_str());
 
 }
 
 ​
-
-string GetInfo() const {
-
-return Shape::GetInfo() + "\n대각선의 길이 : + to_string(GetDiag())";
-
-}
-
-​
-
-double GetDiag() const {
-
-return sqrt(a * a + b * b);
-
-}
-
-​
-
-private:
-
-double a, b;
 
 };
 
@@ -112,22 +134,38 @@ double a, b;
 
 int main() {
 
-Shape* shapes[] = { new Circle(1), new Rectangle(1, 2) };
+Logger* l = new FileLogger(LogLevels::DEBUG, "log.txt");
+
+delete l;
 
 ​
 
-for (Shape* s : shapes) {
+​
 
-cout << s->GetInfo() << endl;
+ConsoleLogger c(LogLevels::WARNING);
+
+c.Log("abc", LogLevels::ERROR);
+
+c.Log("def", LogLevels::INFO);
+
+c.Log("ghi", LogLevels::WARNING);
+
+​
+
+FileLogger f(LogLevels::DEBUG, "log.txt");
+
+f.Log("abc", LogLevels::ERROR);
+
+f.Log("def", LogLevels::INFO);
+
+f.Log("ghi", LogLevels::WARNING);
 
 }
 
 ​
 
-for (Shape* s : shapes) {
+​
 
-delete s;
+​
 
-}
-
-}
+​
