@@ -1,66 +1,110 @@
 #include <iostream>
 
+#include <string>
+
 ​
 
 using namespace std;
 
 ​
 
-class A {
+const double PI = 3.141592653589793;
+
+​
+
+class Shape {
 
 public:
 
-virtual int f() { return x; }
+virtual ~Shape() {}
 
-virtual ~A() {}
+virtual double GetArea() const = 0;
 
-​
+virtual void Resize(double factor) = 0;
 
-private:
+virtual string GetInfo() const {
 
-int x = 10;
+return "도형의 넓이 : " + to_string(GetArea());
 
-​
+}
 
 };
 
 ​
 
-​
-
-class B : public A {
+class Circle : public Shape {
 
 public:
 
-virtual int f() { return x; }
+Circle(double r) : r(r) {}
 
-virtual int g() { return A::f(); }
+​
+
+double GetArea() const {
+
+return r * r * PI;
+
+}
+
+void Resize(double factor) {
+
+r *= factor;
+
+}
 
 ​
 
 private:
 
-int x = 20;
+double r;
 
 };
 
 ​
 
-class C : public B {
+class Rectangle : public Shape {
 
 public:
 
-int f() { return x; }
+Rectangle(double a, double b) : a(a), b(b) {}
 
-int g() { return B::f(); }
+​
 
-virtual int h() { return B::g(); }
+double GetArea() const {
+
+return a * b;
+
+}
+
+void Resize(double factor) {
+
+a *= factor;
+
+b *= factor;
+
+}
+
+​
+
+string GetInfo() const {
+
+return Shape::GetInfo() + "\n대각선의 길이 : + to_string(GetDiag())";
+
+}
+
+​
+
+double GetDiag() const {
+
+return sqrt(a * a + b * b);
+
+}
 
 ​
 
 private:
 
-int x = 30;
+double a, b;
 
 };
 
@@ -68,46 +112,22 @@ int x = 30;
 
 int main() {
 
-A* a = new B;
-
-A* b = new C;
-
-B* c = new C;
-
-C* d = new C;
+Shape* shapes[] = { new Circle(1), new Rectangle(1, 2) };
 
 ​
 
-cout << a->f() << endl;
+for (Shape* s : shapes) {
 
-cout << static_cast<B*>(a)->g() << endl;
-
-cout << b->f() << endl;
-
-if (C* t = dynamic_cast<C*>(b)) {
-
-cout << t->g() << endl;
+cout << s->GetInfo() << endl;
 
 }
 
-cout << c->f() << endl;
-
-cout << c->g() << endl;
-
-cout << d->g() << endl;
-
-cout << d->h() << endl;
-
 ​
 
-​
+for (Shape* s : shapes) {
 
-delete a;
+delete s;
 
-delete b;
-
-delete c;
-
-delete d;
+}
 
 }
