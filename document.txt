@@ -1,172 +1,76 @@
 #include <iostream>
 
-#include <stdio.h>
-
-#include <string>
-
 using namespace std;
 
-​
 
-enum LogLevels {
 
-DEBUG,
-
-INFO,
-
-WARNING,
-
-ERROR,
-
-FATAL
-
+struct IPerson {
+	virtual ~IPerson() {}
+	virtual void Eat() = 0;
+	virtual int GetAge() = 0;
 };
 
-​
+struct IStudent : virtual IPerson {
+	virtual void Study() = 0;
+};
+struct Student : IStudent {
+	void Eat() {
+		cout << "냠냠..." << endl;
+	}
 
-const char* const LEVEL_HEADINGS[] = {
-
-"DEBUG", "INFO", "WARNING", "ERROR", "FATAL"
-
+	void Study() {
+		cout << "공부한다..." << endl;
+	}
+	int GetAge() { return age; }
+	int age;
 };
 
-​
+struct IWorker : virtual IPerson {
+	virtual void Work() = 0;
+};
+struct Worker : IWorker {
+	void Work() {
+		cout << "일한다..." << endl;
+	}
 
-​
-
-class Logger {
-
-public:
-
-Logger(int minLevel) : minLevel(minLevel) {}
-
-virtual ~Logger() {}
-
-​
-
-void Log(const string& s, int level) {
-
-if (level >= minLevel)
-
-doLogJob(s, level);
-
-​
-
-}
-
-​
-
-int GetMinLevel() const { return minLevel; }
-
-​
-
-protected:
-
-int minLevel;
-
-virtual void doLogJob(const string& s, int level) = 0;
-
+	void Study() {
+		cout << "공부한다..." << endl;
+	}
 };
 
-​
-
-​
-
-class FileLogger : public Logger {
-
-public:
-
-FileLogger(int minLevel, const string& fileName) : Logger(minLevel) {
-
-logFile = fopen(fileName.c_str(), "a");
-
-}
-
-~FileLogger() {
-
-fclose(logFile);
-
-}
-
-​
-
-​
-
-protected:
-
-virtual void doLogJob(const string& s, int level) {
-
-fprintf(logFile, "[%s] %s\n", LEVEL_HEADINGS[level], s.c_str());
-
-}
-
-​
-
-private:
-
-FILE* logFile;
-
+struct Researcher : IStudent, IWorker {
+	void Eat() {
+		cout << "먹는다..." << endl;
+	}
+	void Study() {
+		cout << "공부한다..." << endl;
+	}
+	void Work() {
+		cout << "일한다..." << endl;
+	}
+	int GetAge() { return age; }
+	int age;
 };
-
-​
-
-class ConsoleLogger : public Logger {
-
-public:
-
-ConsoleLogger(int minLevel) : Logger(minLevel) {}
-
-​
-
-protected:
-
-virtual void doLogJob(const string& s, int level) {
-
-printf("[%s] %s\n", LEVEL_HEADINGS[level], s.c_str());
-
-}
-
-​
-
-};
-
-​
-
-void testLogger(Logger& logger) {
-
-​
-
-logger.Log("abc", LogLevels::ERROR);
-
-logger.Log("def", LogLevels::INFO);
-
-logger.Log("ghi", LogLevels::WARNING);
-
-}
-
-​
-
-​
 
 int main() {
+	IPerson* p = new Researcher;
+	p->GetAge();
 
-​
+	delete p;
 
-ConsoleLogger c(LogLevels::WARNING);
+	p = new Student;
+	p->GetAge();
 
-testLogger(c);
+	delete p;
 
-​
+	Student s;
+	s.Study();
+	Researcher r;
+	r.Study();
+	r.Work();
 
-FileLogger f(LogLevels::DEBUG, "log.txt");
-
-testLogger(f);
-
+	
+	
 }
-​
-
-​
-
-​
 
 ​
