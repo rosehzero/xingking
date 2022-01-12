@@ -1,80 +1,66 @@
 #include <iostream>
 
-#include <math.h>
-
 ​
 
 using namespace std;
 
 ​
 
-class Shape {
+class A {
 
 public:
 
-virtual double GetArea() const = 0;
+virtual int f() { return x; }
 
-virtual void Resize(double k) = 0;
+virtual ~A() {}
+
+​
+
+private:
+
+int x = 10;
+
+​
 
 };
 
 ​
 
-class Circle : public Shape {
+​
+
+class B : public A {
 
 public:
 
-Circle(double r) : r(r) {}
+virtual int f() { return x; }
 
-double GetArea() const {
+virtual int g() { return A::f(); }
 
-return r * r * 3.14;
-
-}
-
-void Resize(double k) {
-
-r *= k;
-
-}
+​
 
 private:
 
-double r;
+int x = 20;
 
 };
 
 ​
 
-class Rectangle : public Shape {
+class C : public B {
 
 public:
 
-Rectangle(double a, double b) : a(a), b(b) {}
+int f() { return x; }
 
-double GetArea() const {
+int g() { return B::f(); }
 
-return a * b;
+virtual int h() { return B::g(); }
 
-}
-
-void Resize(double k) {
-
-a *= k;
-
-b *= k;
-
-}
-
-double GetDiag() const {
-
-return sqrt(a * a + b * b);
-
-}
+​
 
 private:
 
-double a, b;
+int x = 30;
 
 };
 
@@ -82,40 +68,46 @@ double a, b;
 
 int main() {
 
-Shape* shapes[] = { new Circle(1), new Rectangle(1, 2) };
+A* a = new B;
+
+A* b = new C;
+
+B* c = new C;
+
+C* d = new C;
 
 ​
 
-for (int i = 0; i < 2; i++) {
+cout << a->f() << endl;
 
-//도형의 넓이 
+cout << static_cast<B*>(a)->g() << endl;
 
-//만약 직사각형일 경우, 대각선의 길이 출력
+cout << b->f() << endl;
 
-cout << "도형의 넓이 : " << shapes[i]->GetArea() << endl;
+if (C* t = dynamic_cast<C*>(b)) {
 
-​
-
-Rectangle* r = dynamic_cast<Rectangle*>(shapes[i]);
-
-if (r != NULL) {
-
-cout << "대각선의 길이 : " << r->GetDiag() << endl;
+cout << t->g() << endl;
 
 }
 
-}
+cout << c->f() << endl;
+
+cout << c->g() << endl;
+
+cout << d->g() << endl;
+
+cout << d->h() << endl;
 
 ​
 
-for (int i = 0; i < 2; i++) {
-
-delete shapes[i];
-
-}
-
 ​
 
-​
+delete a;
+
+delete b;
+
+delete c;
+
+delete d;
 
 }
