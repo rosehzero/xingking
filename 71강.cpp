@@ -2,73 +2,30 @@
 
 using namespace std;
 
-
-
-struct IPerson {
-	virtual ~IPerson() {}
-	virtual void Eat() = 0;
-	virtual int GetAge() = 0;
+class Rectangle { // 직사각형
+public:
+	Rectangle(double a, double b) : a(a), b(b) {}
+	virtual ~Rectangle() {}
+	Rectangle ResizeX(double k) const { return Rectangle(a * k, b); }
+	Rectangle ResizeY(double k) const { return Rectangle(a, b * k); }
+	double GetA() const { return a; }
+	double GetB() const { return b; }
+private:
+	const double a, b;
 };
 
-struct IStudent : virtual IPerson {
-	virtual void Study() = 0;
-};
-struct Student : IStudent {
-	void Eat() {
-		cout << "냠냠..." << endl;
-	}
+class Square : public Rectangle { //정사각형
+public:
+	Square(double a) : Rectangle(a, a) {}
 
-	void Study() {
-		cout << "공부한다..." << endl;
-	}
-	int GetAge() { return age; }
-	int age;
-};
-
-struct IWorker : virtual IPerson {
-	virtual void Work() = 0;
-};
-struct Worker : IWorker {
-	void Work() {
-		cout << "일한다..." << endl;
-	}
-
-	void Study() {
-		cout << "공부한다..." << endl;
-	}
-};
-
-struct Researcher : IStudent, IWorker {
-	void Eat() {
-		cout << "먹는다..." << endl;
-	}
-	void Study() {
-		cout << "공부한다..." << endl;
-	}
-	void Work() {
-		cout << "일한다..." << endl;
-	}
-	int GetAge() { return age; }
-	int age;
 };
 
 int main() {
-	IPerson* p = new Researcher;
-	p->GetAge();
+	Square s(10);
 
-	delete p;
-
-	p = new Student;
-	p->GetAge();
-
-	delete p;
-
-	Student s;
-	s.Study();
-	Researcher r;
-	r.Study();
-	r.Work();
-
-
-
+	Rectangle r = s.ResizeX(2);
+	cout << s.GetA() << endl;
+	cout << s.GetB() << endl;
+	cout << r.GetA() << endl;
+	cout << r.GetB() << endl;
 }
