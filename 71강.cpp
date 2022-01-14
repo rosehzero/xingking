@@ -1,16 +1,27 @@
+//함수포인터
+
 #include <iostream>
 
 using namespace std;
 
-bool compare(int a, int b) {
-	return a == b;
+
+int square(int x) { return x * x; }
+int myFunc(int x) { return x * (x - 15) / 2; }
+
+int arrFnMin(const int arr[], int n, int (*f)(int)) {
+	int min = f(arr[0]);
+	for (int i = 1; i < n; i++) {
+		if (f(arr[i]) < min) {
+			min = f(arr[i]);
+		}
+	}
+	return min;
 }
 
+
+
 int main() {
-	bool(*fp)(int, int) = compare;
-
-	bool res = fp(2, 3); // (*fp) 생략 
-
-
-	cout << res << endl;
+	int arr[7] = { 3, 1, -4, 1, 5, 9, -2 };
+	cout << arrFnMin(arr, 7, square) << endl;
+	cout << arrFnMin(arr, 7, myFunc) << endl;
 }
