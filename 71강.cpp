@@ -1,39 +1,36 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 template<typename T>
-class Vector2 {
-public:
-	Vector2() : x(0), y(0) {}
-	Vector2(T x, T y) : x(x), y(y) {}
-	T GetX() const { return x; }
-	T GetY() const { return y; }
-	Vector2 operator+(const Vector2<T>& rhs) const {
-		return Vector2(x + rhs.x, y + rhs.y);
-	}
-	Vector2 operator-(const Vector2& rhs) const {
-		return Vector2(x - rhs.x, y - rhs.y);
-	}
+T getArraySum(const T arr[], int n) {
+    cout << "템플릿" << endl;
+    T sum = arr[0];
+    for (int i = 1; i < n; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
 
-	Vector2& operator+=(const Vector2& rhs) {
-		x += rhs.x;
-		y += rhs.y;
-		return *this;
-	}
-	Vector2 operator-=(const Vector2& rhs) {
-		x -= rhs.x;
-		y -= rhs.y;
-		return *this;
-	}
-
-private:
-	T x, y;
-};
+//템플릿 특수화
+template<>
+string getArraySum<string>(const string arr[], int n) {
+    cout << "특수화" << endl;
+    string sum = arr[0];
+    for (int i = 1; i < n; i++) {
+        sum += ' ' + arr[i];
+    }
+    return sum;
+}
 
 int main() {
-	Vector2<float> v1(2, 3);
-	Vector2<float> v2(4, 5);
-	Vector2<float> v3 = v1 + v2;
+    string sarr[3] = { "hello", "world", "doodle" };
+    string ssum = getArraySum(sarr, 3);
+    cout << ssum << endl;
+
+    int iarr[5] = { 3, 1, 4, 1, 5 };
+    int isum = getArraySum(iarr, 5);
+    cout << isum << endl;
 
 }
