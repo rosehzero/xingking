@@ -1,28 +1,27 @@
-//람다식 auto/함수포인터
+//유니크포인터
 
 #include <iostream>
-
-
+#include <memory>
 using namespace std;
 
-template<typename T>
-int arrFnMin(const int arr[], int n, T f) {
-	int min = f(arr[0]);
-	for (int i = 1; i < n; i++) {
-		if (f(arr[i]) < min) {
-			min = f(arr[i]);
-		}
-	}
-	return min;
-}
+
+// unique_ptr, shared_ptr, weak_prt
+
+
+class Test {
+public:
+	Test(int x) : x(x) { cout << "생성자" << endl; }
+	~Test() { cout << "소멸자" << endl; }
+	int GetX() const { return x; }
+private:
+	int x;
+};
 
 int main() {
-	int arr[7] = { 3, 1, -4, 1, 5, 9, -2 };
-
-	auto a = arr[1];
-
-	auto fp = [](int n) ->int { return n * n; };
-
-	cout << arrFnMin(arr, 7, [](int n) ->int { return n * n; }) << endl;
-	cout << arrFnMin(arr, 7, [](int n) ->int { return n * (n - 15) / 2; }) << endl;
+	unique_ptr<Test> a(new Test(5));
+	cout << a->GetX() << endl;
+	cout << "====" << endl;
+	a.reset(new Test(6));
+	cout << a->GetX() << endl;
+	cout << "====" << endl;
 }
