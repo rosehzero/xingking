@@ -1,21 +1,9 @@
-//함수포인터 > 함수객체 변환
+//람다식 auto/함수포인터
 
 #include <iostream>
-#include <functional>
+
 
 using namespace std;
-
-class Square {
-public:
-	int operator()(int n) { return n * n; }
-} square;
-
-class MyFunc {
-public:
-	int operator()(int n) { return n * (n - 15) / 2; }
-} myFunc;
-
-
 
 template<typename T>
 int arrFnMin(const int arr[], int n, T f) {
@@ -28,10 +16,13 @@ int arrFnMin(const int arr[], int n, T f) {
 	return min;
 }
 
-
-
 int main() {
 	int arr[7] = { 3, 1, -4, 1, 5, 9, -2 };
-	cout << arrFnMin<Square>(arr, 7, square) << endl;
-	cout << arrFnMin<MyFunc>(arr, 7, myFunc) << endl;
+
+	auto a = arr[1];
+
+	auto fp = [](int n) ->int { return n * n; };
+
+	cout << arrFnMin(arr, 7, [](int n) ->int { return n * n; }) << endl;
+	cout << arrFnMin(arr, 7, [](int n) ->int { return n * (n - 15) / 2; }) << endl;
 }
