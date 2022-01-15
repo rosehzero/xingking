@@ -1,4 +1,6 @@
-//쉐어드포인터
+// 위크포인터
+
+
 
 #include <iostream>
 #include <memory>
@@ -18,11 +20,20 @@ private:
 };
 
 int main() {
-	shared_ptr<Test> a(new Test(5));
+	weak_ptr<Test> b;
 	{
-		shared_ptr<Test> b = a;
+		shared_ptr<Test> a(new Test(5));
+		b = a;
 		cout << a.use_count() << endl;
 		cout << b.use_count() << endl;
+		if (!b.expired()) {
+			cout << b.lock()->GetX() << endl;
+		}
 	}
-	cout << a.use_count() << endl;
+	cout << b.use_count() << endl;
+	if (!b.expired()) {
+		cout << b.lock()->GetX() << endl;
+	}
+
+
 }
