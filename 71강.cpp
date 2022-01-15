@@ -1,4 +1,4 @@
-//유니크포인터
+//쉐어드포인터
 
 #include <iostream>
 #include <memory>
@@ -18,10 +18,11 @@ private:
 };
 
 int main() {
-	unique_ptr<Test> a(new Test(5));
-	cout << a->GetX() << endl;
-	cout << "====" << endl;
-	a.reset(new Test(6));
-	cout << a->GetX() << endl;
-	cout << "====" << endl;
+	shared_ptr<Test> a(new Test(5));
+	{
+		shared_ptr<Test> b = a;
+		cout << a.use_count() << endl;
+		cout << b.use_count() << endl;
+	}
+	cout << a.use_count() << endl;
 }
